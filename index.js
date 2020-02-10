@@ -4,7 +4,13 @@ const get = require("lodash.get");
 const core = require("@actions/core");
 
 const { json, ...paths } = getAllInputs();
-const jsonParsed = JSON.parse(json);
+
+let jsonParsed = {};
+try {
+  jsonParsed = JSON.parse(json);
+} catch {
+  jsonParsed = JSON.parse(Buffer.from(json, "base64").toString());
+}
 
 try {
   core.debug(`json input: ${inspect(jsonParsed)}`);
